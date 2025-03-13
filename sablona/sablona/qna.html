@@ -41,6 +41,7 @@
       </div>
     </section>
       <section class="container">
+<<<<<<< Updated upstream:sablona/sablona/qna.html
       <div class="accordion">
         <div class="question">Otázka 1</div>
         <div class="answer">Odpoveď 1</div>
@@ -56,6 +57,25 @@
     </section>
     </section>
   </div>
+=======
+          <?php include "otazky.php"; ?>
+          <?php for ($i = 0; $i < count($otazky); $i++) {?>
+              <div class="accordion">
+                  <div class="question"><?php echo $otazky[$i]; ?></div>
+                  <div class="answer"><?php echo $odpovede[$i]; ?></div>
+              </div>
+          <?php } ?>
+      </section>
+      <section class="container">
+          <?php include "otazky1.php"; ?>
+          <?php for ($i = 0; $i < count($otazky1); $i++) {?>
+              <div class="accordion">
+                  <div class="question"><?php echo $otazky1[$i]; ?></div>
+                  <div class="answer"><?php echo $odpovede1[$i]; ?></div>
+              </div>
+          <?php } ?>
+      </section>
+>>>>>>> Stashed changes:sablona/sablona/qna.php
   </main>
   <footer class="container bg-dark text-white">
     <div class="row">
