@@ -48,6 +48,17 @@
                   <div class="answer"><?php echo $odpovede[$i]; ?></div>
               </div>
           <?php } ?>
+      </section>
+
+      <section class="container">
+          <?php include "otazky1.php"; ?>
+          <?php for ($i = 0; $i < count($otazky1); $i++) {?>
+              <div class="accordion">
+                  <div class="question"><?php echo $otazky1[$i]; ?></div>
+                  <div class="answer"><?php echo $odpovede1[$i]; ?></div>
+              </div>
+          <?php } ?>
+      </section>
   </main>
   <footer class="container bg-dark text-white">
     <div class="row">
