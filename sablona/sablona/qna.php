@@ -41,7 +41,15 @@
       </div>
     </section>
       <section class="container">
-      <div class="accordion">
+          <?php include "otazky.php"; ?>
+          <?php for ($i = 0; $i < count($otazky); $i++) {?>
+              <div class="accordion">
+                  <div class="question"><?php echo $otazky[$i]; ?></div>
+                  <div class="answer"><?php echo $odpovede[$i]; ?></div>
+              </div>
+          <?php } ?>
+      </section>
+          <div class="accordion">
         <div class="question">Otázka 1</div>
         <div class="answer">Odpoveď 1</div>
       </div>
