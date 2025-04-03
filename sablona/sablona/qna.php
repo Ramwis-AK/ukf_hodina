@@ -1,8 +1,37 @@
 <?php
-require_once "QnA.php";
+// Definujeme triedu QnA priamo v tomto súbore
+class QnA {
+    private $db;
+
+    // Konstruktor pre pripojenie k databáze
+    public function __construct($host, $dbname, $username, $password) {
+        try {
+            $this->db = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            echo "Chyba pripojenia k databáze: " . $e->getMessage();
+        }
+    }
+
+    // Metóda na získanie otázok a odpovedí z databázy
+    public function getQnA() {
+        try {
+            $stmt = $this->db->query("SELECT question, answer FROM qna");
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "Chyba pri načítaní otázok a odpovedí: " . $e->getMessage();
+            return [];
+        }
+    }
+
+    // Metóda na automatické uzavretie pripojenia, keď sa s databázou nepracuje
+    public function closeConnection() {
+        $this->db = null;
+    }
+}
 
 // Pripojenie k databáze (nastav svoje údaje)
-$qna = new QnA("localhost", "nazov_db", "uzivatel", "heslo");
+$qna = new QnA("localhost", "nazov_db", "root", "");
 
 // Získanie otázok a odpovedí
 $qna_data = $qna->getQnA();
