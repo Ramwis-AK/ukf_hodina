@@ -1,39 +1,56 @@
 <?php
-// Definujeme triedu QnA priamo v tomto súbore
-class QnA {
-    private $db;
+// ======= TRIEDA DATABASE =======
+namespace db;
 
-    // Konstruktor pre pripojenie k databáze
-    public function __construct($host, $dbname, $username, $password) {
+use PDO;
+use PDOException;
+
+class Database {
+    private $host = "localhost";
+    private $dbname = "nazov_db";
+    private $username = "root";
+    private $password = "";
+    protected $conn;
+
+    public function __construct() {
         try {
-            $this->db = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->conn = new PDO("mysql:host=$this->host;dbname=$this->dbname", $this->username, $this->password);
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
-            echo "Chyba pripojenia k databáze: " . $e->getMessage();
+            echo "Chyba pripojenia: " . $e->getMessage();
         }
     }
 
-    // Metóda na získanie otázok a odpovedí z databázy
+    public function getConnection() {
+        return $this->conn;
+    }
+}
+
+// ======= TRIEDA QNA =======
+namespace App;
+
+require_once __FILE__; // V tomto prípade to slúži ako "mock" načítania súboru Database.php
+
+use db\Database;
+use PDO;
+use PDOException;
+
+class QnA extends Database {
+
     public function getQnA() {
         try {
-            $stmt = $this->db->query("SELECT question, answer FROM qna");
+            $conn = $this->getConnection();
+            $stmt = $conn->query("SELECT question, answer FROM qna");
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             echo "Chyba pri načítaní otázok a odpovedí: " . $e->getMessage();
             return [];
         }
     }
-
-    // Metóda na automatické uzavretie pripojenia, keď sa s databázou nepracuje
-    public function closeConnection() {
-        $this->db = null;
-    }
 }
 
-// Pripojenie k databáze (nastav svoje údaje)
-$qna = new QnA("localhost", "nazov_db", "root", "");
-
-// Získanie otázok a odpovedí
+// ======= VYTVORENIE INŠTANCIE A NAČÍTANIE DÁT =======
+$qna = new QnA();
 $qna_data = $qna->getQnA();
 ?>
 
@@ -41,9 +58,7 @@ $qna_data = $qna->getQnA();
 <html lang="sk">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moja stránka</title>
+    <title>Q&A</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/accordion.css">
     <link rel="stylesheet" href="css/banner.css">
@@ -94,7 +109,6 @@ $qna_data = $qna->getQnA();
             <p class="text-center">Zatiaľ nie sú žiadne otázky a odpovede.</p>
         <?php endif; ?>
     </section>
-
 </main>
 
 <footer class="container bg-dark text-white">
